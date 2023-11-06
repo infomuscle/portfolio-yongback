@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="list(skills, skillType)" class="mb-0">
+    <div class="d-flex align-items-center mb-4">
+        <h3 class="fw-bolder mb-0"><span class="text-gradient d-inline" th:text="${skillType}">Languages</span></h3>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 mb-4">
+        <th:block th:each="skill : ${skills}">
+            <div class="col mb-4 mb-md-0" th:if="${skill.type == skillType}">
+                <div class="d-flex align-items-center bg-light rounded-4 p-3 h-100" th:text="${skill.name}">HTML</div>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
