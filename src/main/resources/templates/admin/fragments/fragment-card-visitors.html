@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Sales Card -->
+<div class="col-xxl-4 col-md-6" th:fragment="visitorCard(visitor)">
+  <div class="card info-card sales-card">
+    <div class="card-body">
+      <h5 class="card-title">Visitors | <span th:text="${visitor.name}">Today</span></h5>
+
+      <div class="d-flex align-items-center">
+        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+        th:style="|color: ${visitor.color}; background: ${visitor.background};|">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="ps-3">
+          <h6 th:text="${visitor.count}">145</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- End Sales Card -->
+</body>
+</html>
