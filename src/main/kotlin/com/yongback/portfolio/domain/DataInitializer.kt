@@ -1,6 +1,7 @@
 package com.yongback.portfolio.domain
 
 import com.yongback.portfolio.domain.constant.SkillType
+import com.yongback.portfolio.domain.entity.Account
 import com.yongback.portfolio.domain.entity.Achievement
 import com.yongback.portfolio.domain.entity.Experience
 import com.yongback.portfolio.domain.entity.ExperienceDetail
@@ -10,6 +11,7 @@ import com.yongback.portfolio.domain.entity.Project
 import com.yongback.portfolio.domain.entity.ProjectDetail
 import com.yongback.portfolio.domain.entity.ProjectSkill
 import com.yongback.portfolio.domain.entity.Skill
+import com.yongback.portfolio.domain.repository.AccountRepository
 import com.yongback.portfolio.domain.repository.AchievementRepository
 import com.yongback.portfolio.domain.repository.ExperienceRepository
 import com.yongback.portfolio.domain.repository.IntroductionRepository
@@ -30,7 +32,8 @@ class DataInitializer(
     private val introductionRepository: IntroductionRepository,
     private val linkRepository: LinkRepository,
     private val projectRepository: ProjectRepository,
-    private val skillRepository: SkillRepository
+    private val skillRepository: SkillRepository,
+    private val accountRepository: AccountRepository
 ) {
 
     val log = LoggerFactory.getLogger(DataInitializer::class.java)
@@ -167,5 +170,11 @@ class DataInitializer(
             )
         )
         projectRepository.saveAll(mutableListOf(project1, project2))
+
+        val account = Account(
+            loginId = "admin1",
+            pw = "\$2a\$10\$BWi6SLqZRJyVvJyufjTtHeYXNNhpNY9rxaVl9fBOE.1t3QF98B.cO"
+        )
+        accountRepository.save(account)
     }
 }
