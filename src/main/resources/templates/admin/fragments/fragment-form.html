@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="card" th:fragment="form(formElements)">
+  <div class="card-body">
+    <h5 class="card-title" th:text="${pageName}">Floating labels Form</h5>
+
+    <!-- Floating Labels Form -->
+    <form class="row g-3" th:id="|${#strings.toLowerCase(pageName)}Form|" onsubmit="return false;">
+      <div class="col-md-12" th:each="formElement : ${formElements}"
+           th:class="|col-md-${formElement.size} ${pageName}FormElement|">
+        <div th:replace="~{admin/fragments/fragment-form-element :: formElement(${formElement})}"></div>
+      </div>
+
+      <th:block th:if="${detailFormElements != null} and ${#lists.size(detailFormElements) > 0}">
+        <hr>
+        <div class="text-center">
+          <button type="button" class="btn btn-outline-primary" onclick="addDetail('detail')">
+            <i class="bi bi-plus me-1"></i>
+          </button>
+        </div>
+        <div class="row detail mt-3">
+          <div class="col-md-12" th:each="detailFormElement : ${detailFormElements}"
+               th:class="|col-md-${detailFormElement.size} ${pageName}DetailFormElement|">
+            <div th:replace="~{admin/fragments/fragment-form-element :: formElement(${detailFormElement})}"></div>
+          </div>
+        </div>
+      </th:block>
+
+      <div class="text-center">
+        <button class="btn btn-primary" th:onclick="save()">저장</button>
+        <button type="reset" class="btn btn-secondary">초기화</button>
+      </div>
+    </form><!-- End floating Labels Form -->
+  </div>
+</div>
+</body>
+</html>
