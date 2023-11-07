@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="card(project)" class="card shadow border-0 rounded-4 mb-5">
+    <div class="card-body p-5">
+        <div class="row align-items-center gx-5">
+            <div class="col text-center text-lg-start mb-4 mb-lg-0">
+                <div class="bg-light p-4 rounded-4">
+                    <div class="text-primary fw-bolder mb-2" th:text="|${project.startYearMonth} - ${project.endYearMonth}|">2019 - Present</div>
+                    <div class="small text-muted d-inline" th:each="skill : ${project.skills}" th:text="${skill.name}">Stark Industries</div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="lead fw-bolder" th:text="${project.name}">Web Developer</div>
+                <p></p>
+                <div class="small" th:text="${project.description}">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+                <p></p>
+                <th:block th:each="detail : ${project.details}">
+                    <div class="small" th:if="${#strings.isEmpty(detail.url)}" th:text="|* ${detail.content}|">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+                    <a class="small" target="_blank" th:if="${!#strings.isEmpty(detail.url)}" th:text="|* ${detail.content}|" th:href="${detail.url}">Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
