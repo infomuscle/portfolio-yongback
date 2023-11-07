@@ -25,6 +25,14 @@
         detailDatatable = createDatatable(detailTable.name, detailTable.columns, detailTable.records, false, false, false);
     }
 
+    var detailRows = null;
+    if (hasDetails) {
+        detailRows = {
+            "detail": document.getElementsByClassName("detail")[0].cloneNode(true),
+            "modalDetail": document.getElementsByClassName("modalDetail")[0].cloneNode(true),
+        }
+    }
+
     function createDatatable(tableName, tableColumns, tableRecords, editable, deletable, hasDetails) {
 
         var tableId = "#" + tableName;
@@ -50,11 +58,116 @@
         return new simpleDatatables.DataTable(tableId, {
             data: {
                 "headings": tableColumns,
-                "data" : tableRecords
+                "data": tableRecords
             }
         });
     }
+
+    /**
+     * Detail Form Element 추가
+     */
+    function addDetail(className) {
+        var elements = document.getElementsByClassName(className);
+        var lastElement = elements[elements.length - 1];
+        lastElement.insertAdjacentElement("afterend", detailRows[className].cloneNode(true));
+    }
+
+    /**
+     * 신규 데이터 저장
+     */
+    function save() {
+
+        // 요청 데이터 세팅
+        var target = "." + pageName + "FormElement"; // .IntroductionFormElement
+        var body = createRequestBodyJson(target);
+        if (hasDetails) {
+            addDetailsToRequest(body, "detail");
+        }
+
+        var urlPath = getUrlPathFrom(pageName);
+        var url = "/admin/api" + urlPath;
+
+        httpRequest("POST", url, body, true);
+    }
+
+    /**
+     * Form에서 JSON 생성
+     */
+    function createRequestBodyJson(target) {
+        var body = {};
+        var formElements = getFormElements(target);
+        formElements.forEach(element => body[element.name] = element.value);
+
+        return body;
+    }
+
+    /**
+     * Form Element 조회
+     */
+    function getFormElements(target) {
+        var selector = target + " input, " + target + " select";
+
+        return document.querySelectorAll(selector);
+    }
+
+    /**
+     * Request Body에 details 추가
+     */
+    function addDetailsToRequest(body, className) {
+        body["details"] = [];
+        var details = document.querySelectorAll("." + className);
+        for (let i = 0; i < details.length; i++) {
+            var detail = {}
+            var detailFormElements = details[i].querySelectorAll("input, select");
+            detailFormElements.forEach(detailFormElement => {
+                if (detailFormElement.value != null && detailFormElement.value.trim().length > 0) {
+                    detail[detailFormElement.name] = detailFormElement.value;
+                }
+            });
+
+            if (Object.keys(detail).length > 0) {
+                body["details"].push(detail);
+            }
+        }
+    }
+
+    /**
+     * 페이지명을 URL 포맷으로 변경
+     */
+    function getUrlPathFrom(pageName) {
+        const splits = pageName.replace(/([A-Z])/g, " $1").trim().split(" ")
+
+        var refined = "";
+        for (let i = 0; i < splits.length; i++) {
+            refined += "/";
+            refined += splits[i].charAt(0).toLowerCase() + splits[i].slice(1) + "s";
+        }
+
+        return refined;
+    }
+
+    /**
+     * HTTP 통신
+     */
+    function httpRequest(method, url, body, reload) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.send(JSON.stringify(body));
+        xhr.onload = () => {
+            if (xhr.response != "") {
+                alert(xhr.response);
+            }
+            if (reload) {
+                location.reload();
+            }
+        }
+
+        return xhr;
+    }
+
     /*]]>*/
 </script>
 </body>
 </html>
+
