@@ -166,6 +166,107 @@
         return xhr;
     }
 
+    /**
+     * 편집 Modal 열기
+     */
+    function openEdit(element) {
+
+        var data = element.parentElement.parentElement.children;
+
+        var target = "." + pageName + "ModalFormElement"; // .IntroductionFormElement
+        var modalFormElements = getFormElements(target);
+        for (let i = 0; i < modalFormElements.length; i++) {
+            modalFormElements[i].value = data[i].innerHTML
+        }
+
+        if (hasDetails) {
+            var id = modalFormElements[0].value;
+
+            var url = "/admin/api/" + pageId + "s/" + id + "/details";
+
+            var xhr = httpRequest("GET", url, null, false)
+            xhr.onload = () => {
+                var response = JSON.parse(xhr.response);
+                var records = response["records"];
+
+                var allElements = document.getElementsByClassName("modalDetail");
+                var lengthToDelete = allElements.length;
+
+                var start = (records.length == 0) ? -1 : 0;
+                for (let i = start; i < records.length; i++) {
+                    var row = detailRows["modalDetail"].cloneNode(true);
+                    var lastElement = allElements[allElements.length - 1];
+                    lastElement.insertAdjacentElement("afterend", row);
+
+                    if (i >= 0) {
+                        let elements = row.querySelectorAll("input, select");
+                        for (let j = 0; j < elements.length; j++) {
+                            elements[j].value = records[i][j];
+                        }
+                    }
+                }
+
+                for (let i = 0; i < lengthToDelete; i++) {
+                    allElements[0].remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * 편집 완료
+     */
+    function completeEdit() {
+
+        // 요청 데이터 세팅
+        var target = "." + pageName + "ModalFormElement"; // .IntroductionFormElement
+        var body = createRequestBodyJson(target);
+        if (hasDetails) {
+            addDetailsToRequest(body, "modalDetail");
+        }
+
+        var id = body["id"];
+        var url = "/admin/api/" + pageId + "s/" + id;
+
+        httpRequest("PUT", url, body, true);
+    }
+
+    function getDetails(element) {
+
+        var id = element.parentNode.parentNode.firstElementChild.innerHTML;
+
+        var url = "/admin/api/" + pageId + "s/" + id + "/details";
+
+        var xhr = httpRequest("GET", url, null, false);
+        xhr.onload = () => {
+            var rows = Array.from({length: detailDatatable.data.data.length}, (v, i) => i);
+            detailDatatable.rows.remove(rows);
+
+            var response = JSON.parse(xhr.response);
+
+            var newData = {
+                "headings": response["columns"],
+                "data": response["records"]
+            };
+            detailDatatable.insert(newData);
+
+            return;
+        }
+    }
+
+    /**
+     * 데이터 삭제
+     */
+    function deleteRecord(element) {
+        var id = element.parentNode.parentNode.firstElementChild.innerHTML;
+        var confirmed = confirm("[" + id + "] 데이터를 삭제하시겠습니까?");
+
+        if (confirmed) {
+            var url = "/admin/api/projects/skills/" + id;
+            httpRequest("DELETE", url, null, true);
+        }
+    }
+
     /*]]>*/
 </script>
 </body>
