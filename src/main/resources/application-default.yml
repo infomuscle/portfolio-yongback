@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    database: h2                        # DBMS 종류
+    open-in-view: false                 # OSIV 사용 여부
+    show-sql: true                      # SQL 로깅 여부
+    hibernate:
+      ddl-auto: create                  # 자동 DDL 설정
+    properties:
+      hibernate:
+        format_sql: false               # SQL 포맷 여부
+        # default_batch_fetch_size: 10  # BATCH_FETCH 크기 설정
+  datasource:
+    url: jdbc:h2:mem:portfolio          # 데이터소스 URL
+    username: sa                        # DBMS 로그인 사용자 이름
+    password:                           # DBMS 로그인 비밀번호
+    driver-class-name: org.h2.Driver    # JDBC 드라이버 이름
+  h2:
+    console:
+      enabled: true                     # H2 콘솔 사용 여부
+      path: /h2-console                 # H2 콘솔 경로
