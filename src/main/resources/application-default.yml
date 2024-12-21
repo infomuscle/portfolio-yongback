@@ -8,7 +8,7 @@ spring:
     properties:
       hibernate:
         format_sql: false               # SQL 포맷 여부
-        # default_batch_fetch_size: 10  # BATCH_FETCH 크기 설정
+        default_batch_fetch_size: 10    # BATCH_FETCH 크기 설정
   datasource:
     url: jdbc:h2:mem:portfolio          # 데이터소스 URL
     username: sa                        # DBMS 로그인 사용자 이름
