@@ -1,11 +1,5 @@
 # Yongback's Portfolio
 
-이 프로젝트는 인프런 <[입문자를 위한 Spring Boot with Kotlin - 나만의 포트폴리오 사이트 만들기](https://www.inflearn.com/course/%EC%9E%85%EB%AC%B8%EC%9E%90-spring-boot-kotlin-%ED%8F%AC%ED%8A%B8%ED%8F%B4%EB%A6%AC%EC%98%A4)> 강의의 데모 프로젝트입니다
-
-
-
-## 프로젝트 소개
-
 ![메인 화면](./images/image0.png)
 
 개발자 고양이 정용백의 포트폴리오 사이트입니다.
