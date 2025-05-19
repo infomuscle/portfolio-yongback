@@ -3,19 +3,19 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" th:fragment="sidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html" th:href="@{/admin}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">YB Admin</div>
     </a>
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="index.html">
+    <li class="nav-item" th:classappend="${'Dashboard' == pageName} ? 'active'">
+        <a class="nav-link" href="index.html" th:href="@{/admin}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -25,20 +25,19 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+        Presentation
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComponents">
+    <li class="nav-item" th:each="menu : ${menus}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComponents" th:attr="data-target='#'+${#strings.toLowerCase(menu.name)}+'-menu'">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
+            <span th:text="${menu.name}">Components</span>
         </a>
-        <div id="collapseComponents" class="collapse show" data-parent="#accordionSidebar">
+        <div id="collapseComponents" class="collapse" data-parent="#accordionSidebar" th:id="${#strings.toLowerCase(menu.name)}+'-menu'" th:classappend="${menu.name == menuName} ? 'show'">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item active" href="tables.html">Tables</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
+                <h6 class="collapse-header" th:text="Tables">Custom Components:</h6>
+                <a class="collapse-item" href="cards.html" th:each="page : ${menu.pages}" th:href="${page.url}" th:text="${page.name}" th:classappend="${page.name == pageName} ? 'active'">Cards</a>
             </div>
         </div>
     </li>
