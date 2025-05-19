@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+
+<div th:replace="~{admin/fragments/fragment-head :: head}"></div>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <div th:replace="~{admin/fragments/fragment-sidebar :: sidebar}"></div>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Topbar -->
+    <div th:replace="~{admin/fragments/fragment-topbar :: topbar}"></div>
+    <!-- End of Topbar -->
+
+    <!-- Main Content -->
+    <div th:replace="${content}">
+      <p>Contents</p>
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <div th:replace="~{admin/fragments/fragment-footer :: footer}"></div>
+    <!-- End of Footer -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="~{admin/fragments/fragment-modal-logout :: modalLogout}"></div>
+
+<div th:replace="~{admin/fragments/fragment-scripts :: scripts}"></div>
+
+</body>
+
+</html>
