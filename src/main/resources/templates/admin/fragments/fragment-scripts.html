@@ -13,7 +13,76 @@
     <script src="https://cdn.datatables.net/v/bs4/dt-2.3.0/datatables.min.js" integrity="sha384-wbr6kKtG1fwJzAofriG4M0lkobC2L5O5TXKp1p7+ZNk5LOOLP8l9zaoE8JvrhFs/" crossorigin="anonymous"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js" th:src="@{/js/demo/datatables-demo.js}"></script>
+    <script th:inline="javascript">
+
+        // 페이지 속성
+        const pageName = [[${pageName}]];
+        const pageId = pageName.toString().toLowerCase();
+        const editable = [[${editable}]];
+        const deletable = [[${deletable}]];
+        const hasDetails = [[${hasDetails}]];
+
+        // 버튼 컴포넌트 정의
+        const detailsButton = "<button type=\"button\" class=\"btn btn-light\" onclick=\"getDetails(this)\"><i class=\"far fa-eye\"></button>";
+        const editButton = "<button type=\"button\" class=\"btn btn-light\" data-toggle=\"modal\" data-target=\"#" + pageId + "-modal\" onclick=\"openEdit(this)\"><i class=\"far fa-edit\"></i></button>"
+        const deleteButton = "<button type=\"button\" class=\"btn btn-light\" onclick=\"deleteRecord(this)\"><i class=\"far fa-trash-alt\"></button>"
+
+        const table = [[${table}]];
+        const datatable = createDatatable(table.name, table.columns, table.records, editable, deletable, hasDetails);
+
+        const detailTable = [[${detailTable}]]
+        let detailDatatable = (hasDetails) ? createDatatable(detailTable.name, detailTable.columns, detailTable.records, false, false, false) : null;
+
+        /**
+         * 데이터테이블 초기화
+         */
+        function createDatatable(tableName, tableColumns, tableRecords, editable, deletable, hasDetails) {
+
+            const datatableId = `#${tableName.toLowerCase()}-datatable`;
+
+            // 편집 가능할 경우 컬럼 및 버튼 추가
+            if (editable) {
+                tableColumns.push("edit")
+                tableRecords.forEach(list => list.push(editButton))
+            }
+
+            // 삭제 가능할 경우 컬럼 및 버튼 추가
+            if (deletable) {
+                tableColumns.push("delete")
+                tableRecords.forEach(list => list.push(deleteButton))
+            }
+
+            // 상세 데이터 포함일 경우 컬럼 및 버튼 추가
+            if (hasDetails) {
+                tableColumns.push("details")
+                tableRecords.forEach(list => list.push(detailsButton))
+            }
+
+            const records = convertRecords(tableRecords, tableColumns);
+
+            // 데이터테이블 컬럼 정의 생성
+            const columns = tableColumns.map(column => ({data: column, title: column}));
+
+            return new DataTable(datatableId, {
+                data: records,
+                columns: columns,
+                scrollX: true
+            });
+        }
+
+        /**
+         * 레코드를 객체로 변환
+         */
+        function convertRecords(tableRecords, tableColumns) {
+            return tableRecords.map(record => {
+                const obj = {};
+                tableColumns.forEach((column, idx) => {
+                    obj[column] = record[idx];
+                });
+                return obj;
+            });
+        }
+    </script>
 
 </th:block>
 </html>

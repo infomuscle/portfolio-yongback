@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="card shadow mb-4" th:fragment="datatable(table)">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary" th:text="${table.name}">DataTables Example</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" th:id="${#strings.toLowerCase(table.name)}+'-datatable'">
+      </table>
+    </div>
+  </div>
+</div>
+</html>
