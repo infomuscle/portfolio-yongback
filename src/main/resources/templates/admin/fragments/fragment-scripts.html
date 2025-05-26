@@ -153,6 +153,103 @@
 
             return xhr;
         }
+
+                // 입력 폼 세팅
+        const formId = `${pageId}-form`
+        const modalFormId = `${pageId}-modal-form`
+        const forms = {
+            "form": document.getElementById(formId),
+        }
+        if (editable) {
+            forms["modal-form"] = document.getElementById(modalFormId)
+        }
+
+        // 상세 입력 폼 요소 세팅
+        let detailRows = null;
+        if (hasDetails) {
+            detailRows = {
+                "form-detail": document.getElementById(formId).getElementsByClassName("detail")[0].cloneNode(true),
+                "modal-form-detail": document.getElementById(modalFormId).getElementsByClassName("detail")[0].cloneNode(true),
+            }
+        }
+
+        /**
+         * 입력 폼 상세 행 추가
+         */
+        function addDetailRow(formType) {
+            const row = detailRows[`${formType}-detail`].cloneNode(true);
+            const detailFormRows = getFormRows(formType, "detail");
+            detailFormRows[detailFormRows.length - 1].insertAdjacentElement("afterend", row);
+        }
+
+        /**
+         * 입력 폼 행 조회
+         */
+        function getFormRows(formType, rowType) {
+            const form = forms[formType];
+            const selector = `.row.${rowType}`
+
+            return form.querySelectorAll(selector);
+        }
+
+        /**
+         * 신규 데이터 저장
+         */
+        function save() {
+
+            const body = createRequestBody("form");
+
+            const urlPath = getBaseUrlPath();
+            const url = "/admin/api" + urlPath;
+
+            httpRequest("POST", url, body, true);
+        }
+
+        /**
+         * 입력 폼에서 JSON 요청 바디 생성
+         */
+        function createRequestBody(formType) {
+
+            const body = {};
+
+            // 메인 입력 폼 데이터 세팅
+            const mainRow = getFormRows(formType, "main")[0];
+            const mainFormElements = getFormElements(mainRow);
+            mainFormElements.forEach(element => body[element.name] = element.value);
+
+            // 상세 입력 폼 데이터 세팅
+            if (hasDetails) {
+                const details = [];
+
+                // 각 행마다 데이터 조회하여 객체 생성 및 리스트 추가
+                const detailRows = getFormRows(formType, "detail")
+                detailRows.forEach(detailRow => {
+                    const detail = {};
+
+                    const detailFormElements = getFormElements(detailRow);
+                    detailFormElements.forEach(detailFormElement => {
+                        if (detailFormElement.value != null && detailFormElement.value.trim().length > 0) {
+                            detail[detailFormElement.name] = detailFormElement.value;
+                        }
+                    });
+
+                    if (Object.keys(detail).length > 0) {
+                        details.push(detail);
+                    }
+                });
+
+                body["details"] = details;
+            }
+
+            return body;
+        }
+
+        /**
+         * 입력 폼 행의 요소 조회
+         */
+        function getFormElements(row) {
+            return row.querySelectorAll("input, select")
+        }
     </script>
 
 </th:block>
