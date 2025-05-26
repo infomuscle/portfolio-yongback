@@ -10,7 +10,10 @@
             <h1 class="h3 mb-2 text-gray-800" th:text="${pageName}">Tables</h1>
             <p class="mb-4"></p>
 
-            <!-- DataTales Example -->
+            <!-- Form Card -->
+            <div th:replace="~{admin/fragments/fragment-form :: form(${formElements})}"></div>
+
+            <!-- DataTales Card -->
             <div th:replace="~{admin/fragments/fragment-datatable :: datatable(${table})}"></div>
             <th:block th:if="${hasDetails}">
                 <div th:replace="~{admin/fragments/fragment-datatable :: datatable(${detailTable})}"></div>
