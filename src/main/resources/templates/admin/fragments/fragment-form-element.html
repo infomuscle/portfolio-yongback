@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="formElement(formElement)">
+<div class="form-group col-md-12" th:if="${formElement.type == 'text'}" th:class="|form-group col-md-${formElement.size}|">
+    <label for="exampleInputText" class="d-inline mx-2 my-auto" th:for="${formElement.name}" th:text="${formElement.name}">Text</label>
+    <input type="text" class="form-control d-inline" id="exampleInputText" th:type="${formElement.type}" th:id="${formElement.name}" th:name="${formElement.name}">
+</div>
+<div class="form-group col-md-12" th:if="${formElement.type == 'date'}" th:class="|form-group col-md-${formElement.size}|">
+    <label for="exampleInputDate" class="d-inline mx-2 my-auto" th:for="${formElement.name}" th:text="${formElement.name}">Date</label>
+    <input type="date" class="form-control" id="exampleInputDate" th:type="${formElement.type}" th:id="${formElement.name}" th:name="${formElement.name}">
+</div>
+<div class="form-group col-md-12" th:if="${formElement.type == 'select'}" th:class="|form-group col-md-${formElement.size}|">
+    <label for="exampleInputSelect" class="d-inline mx-2 my-auto" th:for="${formElement.name}" th:text="${formElement.name}">Select</label>
+    <select class="form-control" id="exampleInputSelect" th:id="${formElement.name}" th:name="${formElement.name}">
+        <option disabled selected value th:text="선택"> -- select an option -- </option>
+        <option value="1" th:each="option : ${formElement.options}" th:value="${option}" th:text="${option}">1</option>
+    </select>
+</div>
+</th:block>
+</html>

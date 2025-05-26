@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="card mb-4" th:fragment="form(formElements)">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary" th:text="${pageName}">Form Card Example</h6>
+  </div>
+  <div class="card-body">
+    <form class="user" th:id="|${#strings.toLowerCase(pageName)}-form|" th:onsubmit="'return false;'">
+      <div class="row" th:classappend="main">
+        <th:block th:each="formElement : ${formElements}">
+          <div th:replace="~{admin/fragments/fragment-form-element :: formElement(${formElement})}"></div>
+        </th:block>
+      </div>
+
+      <th:block th:if="${detailFormElements != null} and ${#lists.size(detailFormElements) > 0}">
+
+        <hr>
+
+        <div class="row">
+          <button type="button" class="btn btn-outline-primary justify-content-center mx-auto my-1" onclick="addDetailRow('form')">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+
+        <div class="row" th:classappend="detail">
+          <th:block th:each="detailFormElement : ${detailFormElements}">
+            <div th:replace="~{admin/fragments/fragment-form-element :: formElement(${detailFormElement})}"></div>
+          </th:block>
+        </div>
+
+      </th:block>
+
+      <div class="row justify-content-center">
+        <button class="btn btn-primary m-1" th:text="저장" th:onclick="save()">Submit</button>
+        <button class="btn btn-secondary m-1" th:text="초기화" th:type="reset">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
+</html>
