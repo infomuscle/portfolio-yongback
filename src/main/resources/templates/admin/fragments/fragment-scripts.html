@@ -82,6 +82,77 @@
                 return obj;
             });
         }
+
+        /**
+         * 상세 데이터 조회
+         */
+        function getDetails(element) {
+
+            const id = element.parentElement.parentElement.firstElementChild.innerHTML;
+
+            const urlPath = getBaseUrlPath();
+            const url = "/admin/api" + `${urlPath}/${id}/details`;
+
+            const xhr = httpRequest("GET", url, null, false);
+            xhr.onload = () => {
+
+                // 응답 바디를 JSON으로 파싱
+                const response = JSON.parse(xhr.response);
+
+                // records와 columns 가져오기
+                const tableRecords = response["records"];
+                const tableColumns = response["columns"];
+
+                const records = convertRecords(tableRecords, tableColumns);
+
+                // DataTables용 컬럼 정의 생성
+                const columns = tableColumns.map(column => ({data: column, title: column}));
+
+                // 테이블 재초기화
+                const datatableId = `#${pageId}detail-datatable`;
+                detailDatatable.destroy();
+                detailDatatable = new DataTable(datatableId, {
+                    data: records,
+                    columns: columns,
+                    scrollX: true
+                });
+            }
+        }
+
+        /**
+         * 페이지명을 URL 포맷으로 변경
+         */
+        function getBaseUrlPath() {
+            const splits = pageName.replace(/([A-Z])/g, " $1").trim().split(" ")
+
+            let refined = "";
+            for (let i = 0; i < splits.length; i++) {
+                refined += "/";
+                refined += splits[i].charAt(0).toLowerCase() + splits[i].slice(1) + "s";
+            }
+
+            return refined;
+        }
+
+        /**
+         * HTTP 통신
+         */
+        function httpRequest(method, url, body, reload) {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send(JSON.stringify(body));
+            xhr.onload = () => {
+                if (xhr.response !== "") {
+                    alert(xhr.response);
+                }
+                if (reload) {
+                    location.reload();
+                }
+            }
+
+            return xhr;
+        }
     </script>
 
 </th:block>
