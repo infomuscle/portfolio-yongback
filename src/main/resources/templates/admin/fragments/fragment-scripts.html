@@ -320,6 +320,19 @@
 
             httpRequest("PUT", url, body, true);
         }
+
+        /**
+         * 데이터 삭제
+         */
+        function deleteRecord(element) {
+            var id = element.parentNode.parentNode.firstElementChild.innerHTML;
+            var confirmed = confirm("[" + id + "] 데이터를 삭제하시겠습니까?");
+
+            if (confirmed) {
+                var url = "/admin/api/projects/skills/" + id;
+                httpRequest("DELETE", url, null, true);
+            }
+        }
     </script>
 
 </th:block>
