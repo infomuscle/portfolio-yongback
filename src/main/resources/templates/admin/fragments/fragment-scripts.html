@@ -250,6 +250,76 @@
         function getFormElements(row) {
             return row.querySelectorAll("input, select")
         }
+
+        /**
+         * 편집 열기
+         */
+        function openEdit(element) {
+
+            const formType = "modal-form"
+
+            const data = element.parentElement.parentElement.children;
+
+            // 메인 입력 폼 값 세팅
+            const mainRow = getFormRows(formType, "main")[0];
+            const mainFormElements = getFormElements(mainRow);
+            for (let i = 0; i < mainFormElements.length; i++) {
+                mainFormElements[i].value = data[i].innerHTML
+            }
+
+            // 상세 입력 폼 값 세팅
+            if (hasDetails) {
+
+                // 아이디로 요청 URL 세팅
+                const id = mainFormElements[0].value;
+                const urlPath = getBaseUrlPath();
+                const url = "/admin/api" + `${urlPath}/${id}/details`;
+
+                // HTTP 통신
+                const xhr = httpRequest("GET", url, null, false)
+                xhr.onload = () => {
+
+                    // 레코드 파싱
+                    const response = JSON.parse(xhr.response);
+                    const records = response["records"];
+
+                    // 상세 입력 폼 행이 1개가 될 때까지 삭제
+                    let detailFormRows = getFormRows(formType, "detail");
+                    while (detailFormRows.length > 1) {
+                        detailFormRows[detailFormRows.length - 1].remove();
+                        detailFormRows = getFormRows(formType, "detail")
+                    }
+
+                    // 상세 입력 폼 행이 레코드 수와 같아질 때까지 추가
+                    while (detailFormRows.length < records.length) {
+                        const row = detailRows["modal-form-detail"].cloneNode(true);
+                        detailFormRows[detailFormRows.length - 1].insertAdjacentElement("afterend", row);
+                        detailFormRows = getFormRows(formType, "detail")
+                    }
+
+                    // 레코드 값을 각 상세 입력 폼 행에 세팅
+                    for (let i = 0; i < records.length; i++) {
+                        const detailFormElements = getFormElements(detailFormRows[i]);
+                        for (let j = 0; j < detailFormElements.length; j++) {
+                            detailFormElements[j].value = records[i][j];
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * 편집 완료
+         */
+        function completeEdit() {
+            const body = createRequestBody("modal-form");
+
+            const id = body["id"];
+            const urlPath = getBaseUrlPath();
+            const url = "/admin/api" + urlPath + `/${id}`;
+
+            httpRequest("PUT", url, body, true);
+        }
     </script>
 
 </th:block>
