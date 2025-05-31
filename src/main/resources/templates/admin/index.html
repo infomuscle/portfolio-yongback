@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/layout-admin :: layout(~{::#content})}">
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            </div>
+
+            <!-- Content Row -->
+            <div class="row">
+
+                <!-- Visitor Cards -->
+                <th:block th:each="visitor : ${visitors}">
+                    <div th:replace="~{admin/fragments/fragment-card-visitors :: visitorCard(${visitor})}"></div>
+                </th:block>
+
+            </div>
+
+            <!-- Content Row -->
+            <div class="row">
+
+                <!-- Content Column -->
+                <div class="col-lg-12 mb-4">
+
+                    <!-- DataTables Card -->
+                    <div th:replace="~{admin/fragments/fragment-datatable :: datatable(${table})}"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+</html>
