@@ -1,3 +1,7 @@
 /gradlew text eol=lf
 *.bat text eol=crlf
 *.jar binary
+*.css linguist-vendored
+*.css linguist-documentation
+*.html linguist-vendored
+*.html linguist-documentation
